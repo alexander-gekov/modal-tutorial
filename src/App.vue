@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useModal } from './composables/useModal';
+import { markRaw } from 'vue';
 import ModalConfirm from './components/ModalConfirm.vue';
 import ModalOverview from './components/ModalOverview.vue';
-import { markRaw } from 'vue';
 
 
 const modal = useModal();
@@ -21,11 +21,11 @@ const openOverview = () => {
 
 <template>
       <div class="flex justify-center items-center min-h-screen">
-        <!-- <Teleport to="#modal"> -->
+        <Teleport to="#modal">
           <Transition>
             <component :is="modal.component.value" v-if="modal.show.value" @close="modal.hideModal"/>
           </Transition>
-        <!-- </Teleport> -->
+        </Teleport>
         <button @click="openConfirm">Open Confirm Modal</button>
         <span class="mx-4"></span>
         <button @click="openOverview">Open Overview Modal</button>
