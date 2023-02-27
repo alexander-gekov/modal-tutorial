@@ -1,30 +1,46 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { useModal } from './composables/useModal';
+import ModalConfirm from './components/ModalConfirm.vue';
+import ModalOverview from './components/ModalOverview.vue';
+import { markRaw } from 'vue';
+
+
+const modal = useModal();
+
+const openConfirm = () => {
+  modal.component.value = markRaw(ModalConfirm);
+  modal.showModal();
+};
+
+const openOverview = () => {
+  modal.component.value = markRaw(ModalOverview);
+  modal.showModal();
+};
+
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+      <div class="flex justify-center items-center min-h-screen">
+        <!-- <Teleport to="#modal"> -->
+          <Transition>
+            <component :is="modal.component.value" v-if="modal.show.value" @close="modal.hideModal"/>
+          </Transition>
+        <!-- </Teleport> -->
+        <button @click="openConfirm">Open Confirm Modal</button>
+        <span class="mx-4"></span>
+        <button @click="openOverview">Open Overview Modal</button>
+      </div>
+      <div class="absolute top-20 bg-red-500 p-2 w-full left-0">This will make things ugly</div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
